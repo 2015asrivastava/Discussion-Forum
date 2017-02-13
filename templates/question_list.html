@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="col-sm-7 col-sm-offset-2">
+{% if title %}
+    <h3>{{ title }}</h3>
+{% endif %}
+{% if no_search %}
+   <h3> {{ no_search }}</h3>
+{% endif %}
+{% if messages %}
+
+    {% for message in messages %}
+     <div class="alert alert-success fade in" role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
+			{{message}}
+		  </div>
+    {% endfor %}
+
+{% endif %}
+</div>
+</div>
+{% for question in question_list %}
+<div class="container">
+<div class="col-sm-7 col-sm-offset-2">
+	<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title"><a href="{{ question.get_absolute_urls }}"><h4>{{ question.title }}</h4></a>asked-{{question.timestamp|timesince}} ago</h3>
+	<div style="text-align:right">By-{{question.user.get_full_name}}</div>
+  </div>
+  <div class="panel-body">
+    <b>{{question.content|truncatechars:250|linebreaks}}</b>
+  </div>
+</div>
+</div>
+
+</div>
+
+{%endfor%}
+
+        <div class="pagination" style="margin-left:310px">
+    <span class="step-links">
+        {% if question_list.has_previous %}
+            <a href="?page={{ question_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ question_list.number }} of {{ question_list.paginator.num_pages }}.
+        </span>
+
+        {% if question_list.has_next %}
+            <a href="?page={{ question_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

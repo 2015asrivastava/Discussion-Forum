@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block head_area %}
+{{ form.media }}
+{% endblock %}
+{% block content %}
+{% for question in question_list %}
+       {{ question.title }}
+{% endfor %}
+
+{% endblock %}

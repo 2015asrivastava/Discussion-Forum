@@ -1,0 +1,219 @@
+{% load staticfiles %}
+<html>
+<head>
+
+<title>{% block head_title %}{% endblock %}</title>
+<link rel="stylesheet" href="{% static "css/base.css" %}">
+<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+<link rel="stylesheet" href="{% static "css/bootstrap-theme.css" %}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="shortcut icon" href="http://www.newdesignfile.com/postpic/2009/06/camera-aperture-symbol_366608.png">
+<style>
+    {% block style %}
+        div.background {
+  background: url(http://robosavages.com/wp-content/uploads/2012/11/header-295-2.jpg) repeat;
+  height:50%;
+  border: 1px solid black;
+
+}
+
+div.transbox h3 {
+  fontFamily:cursive;
+  margin: 5%;
+  font-weight: bold;
+  color: #ffffff;
+  text-align:center;
+  font-style: oblique;
+  font-size:80px;
+
+
+}
+.wmd-panel{
+    margin-left: 0px!important;
+    margin-right: 0px!important;
+}
+
+    {% endblock style %}
+</style>
+{% block head_area %}
+
+
+{% endblock %}
+<div class="background">
+  <div class="transbox">
+    <h3>Discussion Forum</h3>
+
+  </div>
+</div>
+
+</head>
+<body ">
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+  <div class="container">
+  <nav class="navbar navbar-inverse bg-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url "forum:question_list"%}">Home</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	<ul class="nav navbar-nav">
+        <li><a href=""></a></li>
+      </ul>
+
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Contact us</a></li>
+		<li><a href="#">About us</a></li>
+		{% if not request.user.is_authenticated %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login/Register <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url "login" %}">Login</a></li>
+            <li><a href="{% url "register" %}">Register</a></li>
+          </ul>
+        </li>
+		{%else%}
+		   <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white"><b>{{ request.user.first_name }}</b><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url "logout" %}">Logout</a></li>
+            
+          </ul>
+        </li>
+		 {%endif%}
+
+      </ul>
+	   <form  action="{% url "forum:question_list" %}" method="get" enctype="multipart/form-data" class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" name="q" style="margin-left:4cm;" class="form-control" placeholder="Search" {{ request.GET.q }}>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+ <div style="text-align:right;">
+ {%if request.user.is_authenticated%}
+ <button type="submit" class="btn btn-primary" onclick="location.href='{%url "forum:question_create"%}';">Ask Question</button>
+ <button type="submit" class="btn btn-primary" onclick="location.href='{%url "forum:activity"%}';">Activity</button>
+ {%else%}
+ <button type="submit" class="btn btn-primary" onclick="alert('You need to login to ask a question')">Ask Question</button>
+ {%endif%}
+ </div>
+</div>
+
+				 {% block content %}
+
+				 {% endblock %}
+
+
+<script>
+  src="http://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+
+<srcript src="{% static "js/bootstrap.min.js" %}"></srcript>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+
+
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+   $(".content-markdown").each(function(){
+       var content_markdowm=$(this).text()
+       console.log(content_markdowm)
+       var marked_down=marked(content_markdowm)
+       $(this).html(marked_down)
+   })
+   
+   $(".upvote").click(function () {
+	
+    
+      var ansid;
+		ansid=$(this).attr("data-ansid")
+		console.log("print the id for",ansid)
+       
+        $.get('upvote/',{answer_id:ansid},function (data) {
+		
+		 console.log("ansid hetre",data.likes)
+	   var x=somefunction(ansid)
+	   console.log("punfdxjj",x)
+		$("#"+x).html(data.likes)
+		if(data.message){
+		alert(data.message);
+		}
+		if(data.is_downvote_exists==true){
+		 $("strong[name=" + x + "]").html(data.dislikes)
+		}
+    });
+    });
+	
+	   $(".downvote").click(function () {
+	
+    
+      var ansid;
+		ansid=$(this).attr("data-ansid")
+		console.log("print the id for",ansid)
+       
+        $.get('downvote/',{answer_id:ansid},function (data) {
+		
+		 console.log("ansid hetre",data.dislikes)
+	   var x=somefunction(ansid)
+	   console.log("punfdxjj",x)
+		$("strong[name=" + x + "]").html(data.dislikes)
+		if(data.message){
+		alert(data.message);
+		}
+		if(data.is_upvote_exists==true){
+		 $("strong[data-like=" + x + "]").html(data.likes)
+		}
+    });
+    });
+	
+	
+	
+});
+ 
+function somefunction(ansid){
+var abc=ansid
+console.log("abs is ger",abc)
+return abc;
+}
+</script>
+
+<footer style="background-color:black;margin-bottom:0px;bottom:0px">
+<h3 style="color:white;text-align:center">About Discussion Forum</h3>
+<p style="color:grey;text-align:center;font-size:17px">
+Discussion Forum is a place where you'll find the most<br /> relevant information about your various doubts<br/>
+Read our About Us page to know more about Discussion Forum
+</p>
+</div>
+</footer>
+
+</body>
+
+</html>
